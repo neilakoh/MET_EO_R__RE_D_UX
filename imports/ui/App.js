@@ -23,7 +23,12 @@ class App extends Component {
     ));
   }
 
+  componentDidMount() {
+    this.props.actions.saveName("neil")
+  }
+
   render() {
+
     return (
       <div className="container">
       <div className="alert alert-danger" role="alert">
@@ -46,8 +51,9 @@ App.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  console.log('state', state);
   return {
-
+    
   };
 }
 

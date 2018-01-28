@@ -1,5 +1,5 @@
-import reducer from './reducers';
+import saveName from './reducers';
 
 export {
-  reducer
+  saveName
 };
