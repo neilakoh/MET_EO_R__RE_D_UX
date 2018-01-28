@@ -5,42 +5,31 @@ import {bindActionCreators} from 'redux';
 import * as courseAction from '../../client/actions/actions';
 import { connect } from 'react-redux';
 
-import Task from './Task.js';
-
 // App component - represents the whole app
 class App extends Component {
-  getTasks() {
-    return [
-      { _id: 1, text: 'This is task 1' },
-      { _id: 2, text: 'This is task 2' },
-      { _id: 3, text: 'This is task 3' },
-    ];
+  constructor() {
+    super();
+
+    this.saveTask = this.saveTask.bind(this);
   }
 
-  renderTasks() {
-    return this.getTasks().map((task) => (
-      <Task key={task._id} task={task} />
-    ));
-  }
+  saveTask() {
+    const { actions } = this.props;
+    let data = {
+      name: "save this data",
+      createdAt: new Date(),
+      author: "neil anthony te",
+      status: "progress",
+    }
 
-  componentDidMount() {
-    this.props.actions.saveName("neil")
+    actions.saveTask(data);
   }
 
   render() {
-
+    console.log(this.props.saveTaskResult);
     return (
       <div className="container">
-      <div className="alert alert-danger" role="alert">
-        This is a danger alert—check it out!
-      </div>
-        <header>
-          <h1>Todo List</h1>
-        </header>
-
-        <ul>
-          {this.renderTasks()}
-        </ul>
+        <button type="button" className="btn btn-primary" onClick={this.saveTask} >Save Task</button>
       </div>
     );
   }
@@ -51,9 +40,8 @@ App.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('state', state);
   return {
-    
+    saveTaskResult: state.saveTask,
   };
 }
 

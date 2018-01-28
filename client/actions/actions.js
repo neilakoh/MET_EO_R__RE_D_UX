@@ -4,24 +4,44 @@ export function saveName(name) {
 	return (dispatch) => {
 		Meteor.call("sendName", name, (err, res)=>{
 			if(err) {
-				dispatch(errorHandler(err));
+				dispatch(errorHandler('FAILED', err));
 			} else {
-				dispatch(successHandler(res));
+				dispatch(successHandler('SUCCESS', res));
 			}
 		});
 	}
 }
 
-export function successHandler(value) {
-	console.log('success',value);
-	return {
-		type: 'SUCCESS', value
+export function saveTask(data) {
+	return (dispatch) => {
+		Meteor.call("saveTask", data, (err, res)=>{
+			if(err) {
+				let response ={
+					success: false,
+					data: {},
+					documentId: err
+				};
+				dispatch(errorHandler('SAVE_TASK_FAILED', err));
+			} else {
+				let response ={
+					success: true,
+					data: data,
+					documentId: res
+				};
+				dispatch(successHandler('SAVE_TASK_SUCCESS', response));
+			}
+		});
 	}
 }
 
-export function errorHandler(value) {
-	console.log('error',value);
+export function successHandler(type, value) {
 	return {
-		type: 'FAILED', value
+		type: type, value
+	}
+}
+
+export function errorHandler(type, value) {
+	return {
+		type: type, value
 	};
 }
