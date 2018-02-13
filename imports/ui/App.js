@@ -5,42 +5,47 @@ import {bindActionCreators} from 'redux';
 import * as courseAction from '../../client/actions/actions';
 import { connect } from 'react-redux';
 
-import Task from './Task.js';
-
 // App component - represents the whole app
 class App extends Component {
-  getTasks() {
-    return [
-      { _id: 1, text: 'This is task 1' },
-      { _id: 2, text: 'This is task 2' },
-      { _id: 3, text: 'This is task 3' },
-    ];
-  }
+  constructor() {
+    super();
 
-  renderTasks() {
-    return this.getTasks().map((task) => (
-      <Task key={task._id} task={task} />
-    ));
+    this.saveTask = this.saveTask.bind(this);
+    this.removeTask = this.removeTask.bind(this);
   }
 
   componentDidMount() {
-    this.props.actions.saveName("neil")
+    const { actions } = this.props;
+    actions.fetchTasks({_id: "dadrrdmZpRmbH4N8f"});
+  }
+
+  saveTask() {
+    const { actions } = this.props;
+    let data = {
+      name: "save this data",
+      createdAt: new Date(),
+      author: "neil anthony te",
+      status: "progress",
+    }
+
+    actions.saveTask(data);
+  }
+
+  removeTask() {
+    const { actions } = this.props;
+    let query = {
+      _id: "sJDNTcwhDPJfLceQg"
+    };
+    actions.removeTask(query);
   }
 
   render() {
-
+    console.log(this.props.removedTaskResult);
+    console.log(this.props.savedTaskResult);
     return (
       <div className="container">
-      <div className="alert alert-danger" role="alert">
-        This is a danger alert—check it out!
-      </div>
-        <header>
-          <h1>Todo List</h1>
-        </header>
-
-        <ul>
-          {this.renderTasks()}
-        </ul>
+        <button type="button" className="btn btn-primary" onClick={this.saveTask} >Save Task</button>
+        <button type="button" className="btn btn-primary" onClick={this.removeTask} >Remove Task</button>
       </div>
     );
   }
@@ -48,12 +53,14 @@ class App extends Component {
 
 App.propTypes = {
   actions: PropTypes.object.isRequired,
+  savedTaskResult: PropTypes.object.isRequired,
+  removedTaskResult: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('state', state);
   return {
-    
+    savedTaskResult: state.saveTask,
+    removedTaskResult: state.removeTask
   };
 }
 
